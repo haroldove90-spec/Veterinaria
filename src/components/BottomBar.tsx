@@ -12,6 +12,7 @@ import {
   Tags,
   Boxes,
   UserCog,
+  Menu,
 } from 'lucide-react';
 import { UserRole } from '../types';
 import { AppViewId } from './Sidebar';
@@ -20,12 +21,14 @@ interface BottomBarProps {
   currentRole: UserRole;
   currentView: AppViewId;
   onSelectView: (view: AppViewId) => void;
+  onOpenMenu: () => void;
 }
 
 export const BottomBar: React.FC<BottomBarProps> = ({
   currentRole,
   currentView,
   onSelectView,
+  onOpenMenu,
 }) => {
   const getNavItems = () => {
     switch (currentRole) {
@@ -55,6 +58,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({
           { id: 'appointments' as AppViewId, label: 'Citas', icon: CalendarDays },
           { id: 'pets' as AppViewId, label: 'Pacientes', icon: Dog },
           { id: 'inventory' as AppViewId, label: 'Insumos', icon: Boxes },
+          { id: 'cash-register' as AppViewId, label: 'Caja', icon: Receipt },
         ];
     }
   };
@@ -63,7 +67,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-lg px-2 py-1.5 safe-area-bottom">
-      <div className="grid grid-flow-col auto-cols-fr items-center justify-around gap-1 max-w-lg mx-auto">
+      <div className="grid grid-cols-5 items-center justify-around gap-1 max-w-lg mx-auto">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
@@ -82,12 +86,21 @@ export const BottomBar: React.FC<BottomBarProps> = ({
                   isActive ? 'text-teal-600 stroke-[2.2]' : 'text-slate-400'
                 }`}
               />
-              <span className="text-[10px] leading-tight truncate max-w-[70px]">
+              <span className="text-[10px] leading-tight truncate max-w-[62px]">
                 {item.label}
               </span>
             </button>
           );
         })}
+
+        {/* 5th Button: Open Full Menu / Drawer */}
+        <button
+          onClick={onOpenMenu}
+          className="flex flex-col items-center justify-center py-1 px-1 rounded-xl text-slate-500 hover:text-slate-800 transition-all select-none active:scale-95"
+        >
+          <Menu className="w-5 h-5 mb-0.5 text-slate-400" />
+          <span className="text-[10px] leading-tight truncate">Más</span>
+        </button>
       </div>
     </nav>
   );

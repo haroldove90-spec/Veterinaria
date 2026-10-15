@@ -522,6 +522,7 @@ export default function App() {
         currentRole={currentRole}
         currentView={currentView}
         onSelectView={(view) => setCurrentView(view)}
+        onOpenMenu={() => setIsSidebarOpen(true)}
       />
 
       {/* Modales Compartidos */}

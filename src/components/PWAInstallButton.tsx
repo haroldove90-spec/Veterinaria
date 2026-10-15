@@ -34,8 +34,9 @@ export const PWAInstallButton: React.FC<{ compact?: boolean }> = ({ compact = fa
             : 'px-3 py-1.5 text-xs sm:text-sm bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700'
         }`}
       >
-        <Download className="w-4 h-4 animate-bounce" />
-        <span>Instalar App</span>
+        <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 animate-bounce" />
+        <span className="hidden sm:inline">Instalar App</span>
+        <span className="sm:hidden text-[11px]">Instalar</span>
       </button>
 
       {showGuide && (

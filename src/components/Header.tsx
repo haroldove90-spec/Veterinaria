@@ -90,12 +90,12 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Center: Identificación del Rol Activo */}
-        <div className="flex items-center">
+        <div className="hidden sm:flex items-center">
           <div
             className={`flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border text-xs sm:text-sm font-semibold shadow-2xs ${roleInfo.badgeClass}`}
           >
             {roleInfo.icon}
-            <span className="truncate max-w-[120px] sm:max-w-none">{roleInfo.title}</span>
+            <span className="truncate max-w-[140px] md:max-w-none">{roleInfo.title}</span>
           </div>
         </div>
 
