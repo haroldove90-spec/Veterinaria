@@ -1,0 +1,97 @@
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
+
+const publicDir = path.resolve('public');
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true });
+}
+
+// Crisp veterinary medical badge SVG (Teal + Mint + White cross and paw)
+const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="50%" stop-color="#0d9488" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="pawGrad" x1="160" y1="160" x2="352" y2="352" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#ecfdf5" />
+    </linearGradient>
+    <filter id="shadow" x="60" y="60" width="392" height="392" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#042f2e" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+
+  <!-- Subtle ring decoration -->
+  <circle cx="256" cy="256" r="210" stroke="#ffffff" stroke-opacity="0.15" stroke-width="6" stroke-dasharray="16 12"/>
+
+  <!-- White medical badge backing -->
+  <g filter="url(#shadow)">
+    <!-- Main pad -->
+    <path d="M256 220 C210 220 180 255 180 300 C180 345 215 375 256 375 C297 375 332 345 332 300 C332 255 302 220 256 220 Z" fill="url(#pawGrad)"/>
+    <!-- Central Medical Cross inside Main Pad -->
+    <path d="M246 270 H266 V290 H286 V310 H266 V330 H246 V310 H226 V290 H246 Z" fill="#0d9488"/>
+    
+    <!-- Outer toe pads -->
+    <!-- Left outer -->
+    <ellipse cx="168" cy="245" rx="28" ry="36" transform="rotate(-25 168 245)" fill="url(#pawGrad)"/>
+    <!-- Left inner -->
+    <ellipse cx="218" cy="180" rx="26" ry="38" transform="rotate(-10 218 180)" fill="url(#pawGrad)"/>
+    <!-- Right inner -->
+    <ellipse cx="294" cy="180" rx="26" ry="38" transform="rotate(10 294 180)" fill="url(#pawGrad)"/>
+    <!-- Right outer -->
+    <ellipse cx="344" cy="245" rx="28" ry="36" transform="rotate(25 344 245)" fill="url(#pawGrad)"/>
+    
+    <!-- Heart accent badge at top right -->
+    <circle cx="360" cy="150" r="32" fill="#10b981"/>
+    <path d="M360 162 L350 152 C345 147 345 140 350 135 C355 130 363 131 366 137 C369 131 377 130 382 135 C387 140 387 147 382 152 L372 162 Z" fill="#ffffff" transform="translate(-6, -3) scale(0.9)"/>
+  </g>
+</svg>
+`;
+
+fs.writeFileSync(path.join(publicDir, 'icon.svg'), svgContent);
+
+async function generatePngs() {
+  const svgBuffer = Buffer.from(svgContent);
+
+  // 192x192
+  await sharp(svgBuffer)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(publicDir, 'pwa-192x192.png'));
+
+  // 512x512
+  await sharp(svgBuffer)
+    .resize(512, 512)
+    .png()
+    .toFile(path.join(publicDir, 'pwa-512x512.png'));
+
+  // 512x512 maskable (with safe zone 12% padding)
+  await sharp(svgBuffer)
+    .resize(410, 410)
+    .extend({
+      top: 51,
+      bottom: 51,
+      left: 51,
+      right: 51,
+      background: '#0d9488'
+    })
+    .png()
+    .toFile(path.join(publicDir, 'pwa-maskable-512x512.png'));
+
+  // Apple touch icon 180x180
+  await sharp(svgBuffer)
+    .resize(180, 180)
+    .png()
+    .toFile(path.join(publicDir, 'apple-touch-icon.png'));
+
+  console.log('Successfully generated PWA icon suite!');
+}
+
+generatePngs().catch(console.error);

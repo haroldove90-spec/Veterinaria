@@ -1,0 +1,6 @@
+{
+  "name": "Veterinaria Pro",
+  "description": "Sistema de gestión integral para clínicas veterinarias: roles de Recepción/Caja, Médico Veterinario y Administrador con historias clínicas, citas, cobro de tickets e inventario.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
